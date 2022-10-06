@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore/lite';
+import { addDoc, collection, getFirestore } from 'firebase/firestore/lite';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,3 +15,15 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+export async function createTicket(threadId: string, text: string) {
+  try {
+    await addDoc(collection(db, 'tickets'), {
+      threadId,
+      text,
+      openedAt: Date(),
+    });
+  } catch (e) {
+    console.log('Error creating ticket', e);
+  }
+}
